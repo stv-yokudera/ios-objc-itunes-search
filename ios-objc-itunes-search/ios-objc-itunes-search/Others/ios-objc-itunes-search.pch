@@ -1,0 +1,19 @@
+//
+//  ios-objc-itunes-search.pch
+//  ios-objc-itunes-search
+//
+//  Created by OkuderaYuki on 2017/09/24.
+//  Copyright © 2017年 YukiOkudera. All rights reserved.
+//
+
+#ifndef ios_objc_itunes_search_pch
+#define ios_objc_itunes_search_pch
+
+// デバッグビルドの場合のみコンソールに出力するログ
+#if DEBUG
+#define Dlog(fmt, ...) NSLog((@"%s [Line: %d] "fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+#define Dlog(fmt, ...)
+#endif
+
+#endif /* ios_objc_itunes_search_pch */
