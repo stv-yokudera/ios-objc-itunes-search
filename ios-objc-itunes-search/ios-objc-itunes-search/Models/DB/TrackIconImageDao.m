@@ -11,6 +11,21 @@
 
 @implementation TrackIconImageDao
 
+// MARK: - CREATE TABLE
+
++ (BOOL)createTrackIconImageTable {
+    
+    NSString *sql = @"CREATE TABLE IF NOT EXISTS TrackIconImage (trackId INTEGER PRIMARY KEY, imageData BLOB)";
+    
+    BOOL result = NO;
+    
+    SQLiteHelper *sqliteHelper = [SQLiteHelper new];
+    [sqliteHelper dbOpen];
+    result = [sqliteHelper.db executeUpdate:sql];
+    [sqliteHelper dbClose];
+    return result;
+}
+
 // MARK: - INSERT
 
 + (void)insert:(TrackIconImage *)newObject {

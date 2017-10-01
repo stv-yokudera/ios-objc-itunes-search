@@ -11,11 +11,12 @@
 #import "TracksProvider.h"
 #import "TrackTableViewCell.h"
 
-
 #import "UITableViewCell+Identifier.h"
 
+typedef void (^ImageDownloadCompletionHandler)(UIImage *result);
+
 @interface TracksProvider ()
-@property (nonatomic, readwrite)NSArray <Track *> *tracks;
+@property (nonatomic, readwrite) NSArray <Track *> *tracks;
 @end
 
 @implementation TracksProvider
@@ -66,22 +67,12 @@
                 cell.iconImageView.image = savedImage;
                 [cell layoutSubviews];
                 return cell;
-            } else {
-                // DBから画像を取得できなかった場合は、URLから画像を取得して、DBに登録する
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    NSString *imageURL = self.tracks[indexPath.row].artworkUrl100;
-                    NSData *imageData = [NSData dataWithContentsOfURL: [NSURL URLWithString: imageURL]];
-                    UIImage *image = [UIImage imageWithData:imageData];
-                    TrackIconImage *trackIconImage = [[TrackIconImage alloc] initWithTrackId:self.tracks[indexPath.row].trackId
-                                                                                   imageData:[[NSData alloc] initWithData:imageData]];
-                    [TrackIconImageDao insert:trackIconImage];
-                    
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        cell.iconImageView.image = image;
-                        [cell layoutSubviews];
-                    });
-                });
             }
+            // DBから画像を取得できなかった場合は、URLから画像を取得して、DBに登録する
+            [self downloadImageAtIndexPath:indexPath completionHandler:^(UIImage *result) {
+                cell.iconImageView.image = result;
+                [cell layoutSubviews];
+            }];
             
             return cell;
         }
@@ -92,6 +83,32 @@
             return cell;
         }
     }
+}
+
+#pragma mark - private methods
+
+/**
+ 非同期で画像をダウンロードして、DBに登録する
+
+ @param indexPath (NSIndexPath *) 画像を表示する対象のCellのIndexPath
+ @param completionHandler (void (^)(UIImage *result)) ダウンロード完了時の処理
+ */
+- (void)downloadImageAtIndexPath:(NSIndexPath *)indexPath
+               completionHandler:(ImageDownloadCompletionHandler)completionHandler {
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        Track *targetTrack = self.tracks[indexPath.row];
+        NSURL *imageUrl = [NSURL URLWithString: targetTrack.artworkUrl100];
+        NSData *imageData = [NSData dataWithContentsOfURL: imageUrl];
+        UIImage *image = [UIImage imageWithData:imageData];
+        TrackIconImage *trackIconImage = [[TrackIconImage alloc] initWithTrackId:targetTrack.trackId
+                                                                       imageData:imageData];
+        [TrackIconImageDao insert:trackIconImage];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionHandler(image);
+        });
+    });
 }
 
 @end

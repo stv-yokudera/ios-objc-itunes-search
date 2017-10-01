@@ -13,5 +13,4 @@
 @property (nonatomic, readonly) FMDatabase *db;
 - (BOOL)dbOpen;
 - (BOOL)dbClose;
-- (BOOL)createTrackIconImageTable;
 @end

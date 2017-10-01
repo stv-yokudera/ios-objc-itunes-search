@@ -15,7 +15,7 @@ typedef NS_ENUM (NSUInteger, CellType) {
 };
 
 @interface TracksProvider : NSObject <UITableViewDataSource>
-@property (nonatomic, readonly)NSArray <Track *> *tracks;
+@property (nonatomic, readonly) NSArray <Track *> *tracks;
 
 - (void)set:(NSArray <Track *> *)tracks;
 - (CellType)cellType;

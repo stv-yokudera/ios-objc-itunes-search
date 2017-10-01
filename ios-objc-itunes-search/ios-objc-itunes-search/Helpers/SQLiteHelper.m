@@ -18,8 +18,9 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        Dlog(@"dbPath: %@", [FilePath dbPath]);
-        self.db = [[FMDatabase alloc] initWithPath:[FilePath dbPath]];
+        NSString *dbPath = [FilePath dbPath];
+        Dlog(@"dbPath: %@", dbPath);
+        self.db = [[FMDatabase alloc] initWithPath:dbPath];
         
 #if DEBUG
         // デバッグ時のみSQLiteの実行をトレースする
@@ -36,24 +37,5 @@
 }
 - (BOOL)dbClose {
     return [self.db close];
-}
-
-// MARK: - CREATE TABLE
-
-/**
- TrackIconImageテーブルが存在しなければ作成する
- 
- @return 成功 or 失敗
- */
-- (BOOL)createTrackIconImageTable {
-    
-    NSString *sql = @"CREATE TABLE IF NOT EXISTS TrackIconImage (trackId INTEGER PRIMARY KEY, imageData BLOB)";
-    
-    BOOL result = NO;
-    
-    [self dbOpen];
-    result = [self.db executeUpdate:sql];
-    [self dbClose];
-    return result;
 }
 @end

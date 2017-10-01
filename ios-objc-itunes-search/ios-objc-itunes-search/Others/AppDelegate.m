@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "SQLiteHelper.h"
+#import "TrackIconImageDao.h"
 
 @interface AppDelegate ()
 
@@ -18,7 +18,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     // TrackIconImageテーブルが存在しなければ作成する
-    [[SQLiteHelper new] createTrackIconImageTable];
+    [TrackIconImageDao createTrackIconImageTable];
     
     return YES;
 }

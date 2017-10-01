@@ -10,6 +10,7 @@
 #import "TrackIconImage.h"
 
 @interface TrackIconImageDao : NSObject
++ (BOOL)createTrackIconImageTable;
 + (void)insert:(TrackIconImage *)newObject;
 + (UIImage *)selectByTrackId:(NSInteger)trackId;
 @end
