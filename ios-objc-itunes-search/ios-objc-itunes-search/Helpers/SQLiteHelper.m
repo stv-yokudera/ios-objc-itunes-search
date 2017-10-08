@@ -15,22 +15,37 @@
 
 @implementation SQLiteHelper
 
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        NSString *dbPath = [FilePath dbPath];
-        Dlog(@"dbPath: %@", dbPath);
-        self.db = [[FMDatabase alloc] initWithPath:dbPath];
-        
-#if DEBUG
-        // デバッグ時のみSQLiteの実行をトレースする
-        self.db.traceExecution = YES;
-#endif
-    }
-    return self;
+/**
+ SQLiteHelperのシングルトンインスタンスを生成する
+ */
++ (SQLiteHelper *)shared {
+    static SQLiteHelper *sharedInstance = nil;
+    static dispatch_once_t onceToken = 0;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [SQLiteHelper new];
+        sharedInstance.db = [self createFMDatabase];
+    });
+    
+    return sharedInstance;
 }
 
-// MARK: - helper
+/**
+ FMDatabaseのインスタンスを生成する
+ */
++ (FMDatabase *)createFMDatabase {
+    NSString *dbPath = [FilePath dbPath];
+    Dlog(@"dbPath: %@", dbPath);
+    FMDatabase *db = [[FMDatabase alloc] initWithPath:dbPath];
+    
+    // デバッグ時のみSQLiteの実行をトレースする
+#if DEBUG
+    db.traceExecution = YES;
+#endif
+    
+    return db;
+}
+
+// MARK: - SQLite Helper Methods
 
 - (BOOL)dbOpen {
     return [self.db open];

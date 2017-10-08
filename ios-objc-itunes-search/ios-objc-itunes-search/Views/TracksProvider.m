@@ -103,9 +103,9 @@ typedef void (^ImageDownloadCompletionHandler)(UIImage *result);
         UIImage *image = [UIImage imageWithData:imageData];
         TrackIconImage *trackIconImage = [[TrackIconImage alloc] initWithTrackId:targetTrack.trackId
                                                                        imageData:imageData];
-        [TrackIconImageDao insert:trackIconImage];
         
         dispatch_async(dispatch_get_main_queue(), ^{
+            [TrackIconImageDao insert:trackIconImage];
             completionHandler(image);
         });
     });

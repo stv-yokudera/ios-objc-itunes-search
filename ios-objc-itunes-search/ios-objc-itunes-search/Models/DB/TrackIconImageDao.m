@@ -19,10 +19,9 @@
     
     BOOL result = NO;
     
-    SQLiteHelper *sqliteHelper = [SQLiteHelper new];
-    [sqliteHelper dbOpen];
-    result = [sqliteHelper.db executeUpdate:sql];
-    [sqliteHelper dbClose];
+    [[SQLiteHelper shared] dbOpen];
+    result = [[SQLiteHelper shared].db executeUpdate:sql];
+    [[SQLiteHelper shared] dbClose];
     return result;
 }
 
@@ -32,10 +31,10 @@
     NSString *sql = @"INSERT INTO TrackIconImage (trackId, imageData) values (?, ?)";
     
     NSNumber *trackIdNum = [NSNumber numberWithInteger:newObject.trackId];
-    SQLiteHelper *sqliteHelper = [SQLiteHelper new];
-    [sqliteHelper dbOpen];
-    [sqliteHelper.db executeUpdate:sql withArgumentsInArray:@[trackIdNum, newObject.imageData]];
-    [sqliteHelper dbClose];
+    [[SQLiteHelper shared] dbOpen];
+    [[SQLiteHelper shared].db executeUpdate:sql
+                               withArgumentsInArray:@[trackIdNum, newObject.imageData]];
+    [[SQLiteHelper shared] dbClose];
 }
 
 // MARK: - SELECT
@@ -44,15 +43,15 @@
     NSString *sql = @"SELECT * FROM TrackIconImage WHERE trackId = ?";
     
     NSNumber *trackIdNum = [NSNumber numberWithInteger:trackId];
-    SQLiteHelper *sqliteHelper = [SQLiteHelper new];
-    [sqliteHelper dbOpen];
-    FMResultSet *resultSet = [sqliteHelper.db executeQuery:sql withArgumentsInArray:@[trackIdNum]];
+    [[SQLiteHelper shared] dbOpen];
+    FMResultSet *resultSet = [[SQLiteHelper shared].db executeQuery:sql
+                                                       withArgumentsInArray:@[trackIdNum]];
     
     NSData *imageData;
     while([resultSet next]) {
         imageData = [resultSet dataForColumn:@"imageData"];
     }
-    [sqliteHelper dbClose];
+    [[SQLiteHelper shared] dbClose];
     
     return [[UIImage alloc] initWithData:imageData];
 }

@@ -10,6 +10,7 @@
 #import "FMDB.h"
 
 @interface SQLiteHelper : NSObject
++ (SQLiteHelper *)shared;
 @property (nonatomic, readonly) FMDatabase *db;
 - (BOOL)dbOpen;
 - (BOOL)dbClose;
