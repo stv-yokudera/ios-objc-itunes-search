@@ -22,14 +22,14 @@
 
 @implementation SearchViewController
 
-#pragma mark - view life cycle
+#pragma mark - View Life Cycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setup];
 }
 
-#pragma mark - private methods
+#pragma mark - Private Methods
 - (void)setup {
     Dlog()
     self.searchBar.showsCancelButton = YES;

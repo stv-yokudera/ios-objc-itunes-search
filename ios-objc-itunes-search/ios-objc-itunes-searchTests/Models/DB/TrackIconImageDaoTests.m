@@ -24,7 +24,7 @@
     XCTAssertEqual(savedImage.size.width, 100);
 }
 
-#pragma mark - private methods
+#pragma mark - Private Methods
 
 - (TrackIconImage *)dummyModel {
     NSBundle *testBundle = [NSBundle bundleForClass:[self class]];

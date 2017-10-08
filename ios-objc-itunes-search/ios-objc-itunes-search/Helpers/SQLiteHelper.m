@@ -45,7 +45,7 @@
     return db;
 }
 
-// MARK: - SQLite Helper Methods
+#pragma mark - SQLite Helper Methods
 
 - (BOOL)dbOpen {
     return [self.db open];

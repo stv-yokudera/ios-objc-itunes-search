@@ -11,7 +11,7 @@
 
 @implementation TrackIconImageDao
 
-// MARK: - CREATE TABLE
+#pragma mark - CREATE TABLE
 
 + (BOOL)createTrackIconImageTable {
     
@@ -25,7 +25,7 @@
     return result;
 }
 
-// MARK: - INSERT
+#pragma mark - INSERT
 
 + (void)insert:(TrackIconImage *)newObject {
     NSString *sql = @"INSERT INTO TrackIconImage (trackId, imageData) values (?, ?)";
@@ -37,7 +37,7 @@
     [[SQLiteHelper shared] dbClose];
 }
 
-// MARK: - SELECT
+#pragma mark - SELECT
 
 + (UIImage *)selectByTrackId:(NSInteger)trackId {
     NSString *sql = @"SELECT * FROM TrackIconImage WHERE trackId = ?";

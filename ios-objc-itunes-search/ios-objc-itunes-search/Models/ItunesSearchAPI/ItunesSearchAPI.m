@@ -33,7 +33,7 @@ static NSString *const ItunesSearchAPIHostName = @"itunes.apple.com";
     
 }
 
-#pragma mark - private methods
+#pragma mark - Private Methods
 
 - (APISuccess)itunesSearchAPISuccess {
     

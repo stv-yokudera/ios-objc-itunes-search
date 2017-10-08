@@ -85,7 +85,7 @@ typedef void (^ImageDownloadCompletionHandler)(UIImage *result);
     }
 }
 
-#pragma mark - private methods
+#pragma mark - Private Methods
 
 /**
  非同期で画像をダウンロードして、DBに登録する
