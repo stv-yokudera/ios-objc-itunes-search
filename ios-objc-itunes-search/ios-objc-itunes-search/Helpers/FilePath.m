@@ -19,7 +19,7 @@
     if ([self isTesting]) {
         return [self.documentsDirectory stringByAppendingPathComponent:@"unittest.db"];
     }
-    return [self.documentsDirectory stringByAppendingPathComponent:@"database.db"];
+    return [self.documentsDirectory stringByAppendingPathComponent:@"product.db"];
 }
 
 /**
