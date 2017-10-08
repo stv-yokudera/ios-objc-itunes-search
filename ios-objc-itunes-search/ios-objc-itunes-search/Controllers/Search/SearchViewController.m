@@ -112,8 +112,10 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if ([self.provider cellType] == CellTypeTrack) {
+        tableView.scrollEnabled = YES;
         return TrackTableViewCellHeight;
     }
+    tableView.scrollEnabled = NO;
     return self.tableView.frame.size.height;
 }
 @end
