@@ -11,14 +11,16 @@
 #import "ItunesSearchParamsBuilder.h"
 #import "NetworkConnection.h"
 
-static NSString *const ItunesSearchAPIUrlString = @"https://itunes.apple.com/search";
-static NSString *const ItunesSearchAPIHostName = @"itunes.apple.com";
+@interface ItunesSearchAPI () <APIClientProtocol>
++ (NSString *)baseUrlString;
++ (NSString *)hostName;
+@end
 
 @implementation ItunesSearchAPI
 
 - (void)loadWithTerm:(NSString *)term {
     
-    if (![NetworkConnection isReachableWithHostName:ItunesSearchAPIHostName]) {
+    if (![NetworkConnection isReachableWithHostName:[ItunesSearchAPI hostName]]) {
         [self.loadable offline];
         return;
     }
@@ -26,36 +28,32 @@ static NSString *const ItunesSearchAPIHostName = @"itunes.apple.com";
     NSDictionary *parameters = [ItunesSearchParamsBuilder createWithTerm:term];
     
     __weak typeof(self) wself = self;
-    [APIClient getRequest:ItunesSearchAPIUrlString
+    [APIClient getRequest:[ItunesSearchAPI baseUrlString]
                parameters:parameters
-                  success:[wself itunesSearchAPISuccess]
-                  failure:[wself itunesSearchAPIFailure]];
+                  success:^(id result) {
+                      Dlog(@"%@", result)
+                      ItunesSearchResponse *response = [[ItunesSearchResponse alloc] initWithResponseObject:result];
+                      
+                      if (response.results.count == 0) {
+                          [wself.loadable emptyData];
+                          return;
+                      }
+                      [wself.loadable loaded:response];
+                  }
+                  failure:^(NSError *error) {
+                      Dlog(@"%@", error)
+                      [wself.loadable error];
+                  }];
     
 }
 
-#pragma mark - Private Methods
+#pragma mark - APIClientProtocol
 
-- (APISuccess)itunesSearchAPISuccess {
-    
-    __weak typeof(self) wself = self;
-    return ^(id responseObject) {
-        Dlog(@"%@", responseObject)
-        ItunesSearchResponse *response = [[ItunesSearchResponse alloc] initWithResponseObject:responseObject];
-        
-        if (response.results.count == 0) {
-            [wself.loadable emptyData];
-            return;
-        }
-        [wself.loadable loaded:response];
-    };
++ (NSString *)baseUrlString {
+    return @"https://itunes.apple.com/search";
 }
 
-- (APIFailure)itunesSearchAPIFailure {
-    
-    __weak typeof(self) wself = self;
-    return ^(NSError *error) {
-        Dlog(@"%@", error)
-        [wself.loadable error];
-    };
++ (NSString *)hostName {
+    return @"itunes.apple.com";
 }
 @end

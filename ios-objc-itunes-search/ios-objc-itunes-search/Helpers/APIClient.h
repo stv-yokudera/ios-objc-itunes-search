@@ -11,6 +11,11 @@
 typedef void (^APISuccess)(id responseObject);
 typedef void (^APIFailure)(NSError *error);
 
+@protocol APIClientProtocol
++ (NSString *)baseUrlString;
++ (NSString *)hostName;
+@end
+
 @interface APIClient : NSObject
 
 /**

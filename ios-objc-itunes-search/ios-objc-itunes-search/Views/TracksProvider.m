@@ -55,8 +55,8 @@ typedef void (^ImageDownloadCompletionHandler)(UIImage *result);
     
     switch ([self cellType]) {
         case CellTypeTrack: {
-            TrackTableViewCell *cell = (TrackTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[TrackTableViewCell identifier]
-                                                                                             forIndexPath:indexPath];
+            TrackTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[TrackTableViewCell identifier]
+                                                                       forIndexPath:indexPath];
             cell.trackNameLabel.text = self.tracks[indexPath.row].trackName;
             
             cell.iconImageView.image = nil;
@@ -78,8 +78,8 @@ typedef void (^ImageDownloadCompletionHandler)(UIImage *result);
         }
             
         case CellTypeEmpty: {
-            EmptyTableViewCell *cell = (EmptyTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[EmptyTableViewCell identifier]
-                                                                                             forIndexPath:indexPath];
+            EmptyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[EmptyTableViewCell identifier]
+                                                                       forIndexPath:indexPath];
             return cell;
         }
     }
